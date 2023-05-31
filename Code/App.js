@@ -1,51 +1,57 @@
 function getCoordinates() {
-
+    // Create a canvas element to display the image
+    var canvas = document.createElement('canvas');
+    document.body.appendChild(canvas);
+  
     // Load the image
-    const image = cv.imread('Resources/Línea (10, 10, 5).jpg');
-
-    // Set the starting and ending points of the line
-    const startPoint = new cv.Point(50, 100);
-    const endPoint = new cv.Point(200, 150);
-
-    // Calculate the difference and absolute difference between the points
-    const dx = Math.abs(endPoint.x - startPoint.x);
-    const dy = Math.abs(endPoint.y - startPoint.y);
-    const sx = (startPoint.x < endPoint.x) ? 1 : -1;
-    const sy = (startPoint.y < endPoint.y) ? 1 : -1;
-
-    // Initialize variables for iteration
-    let x = startPoint.x;
-    let y = startPoint.y;
-    let err = dx - dy;
-
-    // Iterate over each pixel in the line and retrieve their coordinates
-    while (true) {
-        // Access the pixel at (x, y)
-        const pixel = image.ucharPtr(y, x);
-        const pixelValue = pixel[0]; // Access the pixel value (if needed)
-
-        // Print the coordinates or perform desired operations
-        console.log(`Pixel: x=${x}, y=${y}`);
-
-        // Check if we have reached the end point
-        if (x === endPoint.x && y === endPoint.y) {
-            break;
-        }
-
-        const err2 = 2 * err;
-
-        // Update the error value and move to the next pixel
-        if (err2 > -dy) {
-            err -= dy;
-            x += sx;
-        }
-        if (err2 < dx) {
-            err += dx;
-            y += sy;
-        }
-    }
-
-    // Release resources
-    image.delete();
+    var imgElement = document.createElement('img');
+    imgElement.onload = function () {
+      // Create a new cv.Mat object from the image
+      var src = new cv.Mat(imgElement.height, imgElement.width, cv.CV_8UC4);
+      var srcData = new Uint8Array(imgElement.width * imgElement.height * 4);
+      var srcDataIndex = 0;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(imgElement, 0, 0);
+      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      for (var i = 0; i < imageData.length; i += 4) {
+        srcData[srcDataIndex++] = imageData[i];
+        srcData[srcDataIndex++] = imageData[i + 1];
+        srcData[srcDataIndex++] = imageData[i + 2];
+        srcData[srcDataIndex++] = imageData[i + 3];
+      }
+      src.data.set(srcData);
+  
+      // Convert the image to grayscale
+      var gray = new cv.Mat();
+      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+  
+      // Apply Canny edge detection
+      var edges = new cv.Mat();
+      cv.Canny(gray, edges, 50, 150);
+  
+      // Apply Hough Line Transform
+      var lines = new cv.Mat();
+      cv.HoughLinesP(edges, lines, 1, Math.PI / 180, 50, 50, 10);
+  
+      // Loop through the lines and get the coordinates
+      for (var i = 0; i < lines.rows; ++i) {
+        var startPoint = new cv.Point(lines.data32S[i * 4], lines.data32S[i * 4 + 1]);
+        var endPoint = new cv.Point(lines.data32S[i * 4 + 2], lines.data32S[i * 4 + 3]);
+  
+        // Display the coordinates of each line
+        console.log("Line " + (i + 1) + ":");
+        console.log("Start Point: (" + startPoint.x + ", " + startPoint.y + ")");
+        console.log("End Point: (" + endPoint.x + ", " + endPoint.y + ")");
+      }
+  
+      // Clean up
+      src.delete();
+      gray.delete();
+      edges.delete();
+      lines.delete();
+    };
+  
+    // Set the source image
+    imgElement.src = 'path_to_your_image.jpg';
     
 }
