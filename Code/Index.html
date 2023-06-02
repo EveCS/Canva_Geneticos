@@ -1,0 +1,85 @@
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap -->
+
+    <link href="../bootstrap-5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../bootstrap-5.3.0-alpha3/dist/css/bootstrap-grid.min.css" rel="stylesheet" />
+    <link href="../bootstrap-5.3.0-alpha3/dist/css/bootstrap-reboot.min.css" rel="stylesheet" />
+
+    <link href="../bootstrap-5.3.0-alpha3/dist/js/bootstrap.min.js" rel="stylesheet" />
+    <link href="../bootstrap-5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" rel="stylesheet" />
+
+    <!-- style css -->
+    <link rel="stylesheet" href="./Style.css">
+
+    <!-- app js -->
+    <script rel="stylesheet" src="./App.js"></script>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solucion Sudoku</title>
+
+
+</head>
+
+<body class="container align-items-center">
+    <div id="CanvaGen">
+        <div class="row">
+            <div class="text">
+                <br />
+                <h1>Canva Genético</h1>
+                <p>Proyecto II | Análisis Algoritmos</p>
+                <br />
+            </div>
+            <hr>
+        </div>
+        <div class="row align-items-center"><br /></div>
+
+        <div class="row align-items-center">
+            <br />
+            <div class="col">
+                <h5 class="text">Generaciones Máximas</h5>
+                <input type="number" min="0" class="form-control" placeholder="Ingrese cantidad" aria-label="Max. Generaciones">
+            </div>
+            <div class="col">
+                <h5 class="text">Individuos x Población</h5>
+                <input type="number" min="0" class="form-control" placeholder="Ingrese cantidad" aria-label="Individuos x Población">
+            </div>
+            <div class="col">
+                <h5 for="rangeIndElegir" class="text">% Individuos a Elegir</h5>
+                <input type="range" class="form-range"  min="0" max="10" step="2" id="rangeElegir">
+            </div>
+            <div class="col">
+                <h5 class="text">% Individuos a Mutar</h5>
+                <input type="range" class="form-range" min="0" max="10" step="2" id="rangeMutar">
+            </div>
+            <div class="col">
+                <h5 class="text">% Individuos a Combinar</h5>
+                <input type="range" class="form-range"  min="0" max="10" step="2" id="rangeCombinar">
+            </div>
+        </div>
+        <div class="row align-items-center"><br /></div>
+        <div class="row align-items-center">
+            <div class="col-9">
+                <br /><br /><br />
+                <h1>** Acá va imagen generada ***</h1>
+            </div>
+            <div class="col-3">
+                <br />
+                <div class="card" style="width: 18rem;">
+                    <img src="../Image/ima02.jpg" width="400px" class="img-fluid" alt="Imagen Replicar">
+                    <div class="card-body">
+                        <h5 class="card-title">Imagen a Replicar</h5>
+                        <p class="card-text">Recuerde cambiar la imagen actual por la imagen que desea generar en el Canva Genético.</p>
+                        <a href="#" class="btn btn-primary">Empezar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+</body>
+
+</html>

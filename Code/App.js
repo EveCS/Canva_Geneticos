@@ -55,3 +55,5 @@ function getCoordinates() {
     imgElement.src = 'path_to_your_image.jpg';
     
 }
+
+

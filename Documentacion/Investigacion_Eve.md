@@ -229,3 +229,8 @@ https://github.com/simondevyoutube/GeneticAlgorithm-Picture
 
 https://www.youtube.com/watch?v=reFtrppkxsA&ab_channel=PatrikRomansk%C3%BD
 use an edge detect algorithm on the image, then for each line I find the distance from the nearest edge for the fitness.
+
+
+ ----------- IMPORTANTE  | RANGE ------------
+ https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range
+ sacar porcentaje del range

@@ -1,6 +1,6 @@
-*{
+* {
     padding: 0;
-    margin: 0;
+    margin: 0px;
     box-sizing: border-box;
 }
 
@@ -8,7 +8,7 @@
     /*background-color: #313136;*/
     height: 100vh;
     width: 100%;
-    background:linear-gradient(45deg, #d6260b, #5b49de, #21f4df, #07c600);
+    background: linear-gradient(45deg, #d6260b, #5b49de, #21f4df, #07c600);
     background-size: 300% 300%;
     animation: color 12 ease-in-out infinite;
 }
@@ -17,15 +17,16 @@
     0% {
         background-position: 0% 50%;
     }
+
     50% {
         background-position: 100% 50%;
     }
+
     100% {
         background-position: 0% 50%;
     }
 }
 
-    
 .image-container {
     position: relative;
     width: 100%;
@@ -47,14 +48,14 @@
     left: 50px;
     font-size: 52px;
     font-weight: bold;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .subtitle {
     color: #ffffff;
     position: absolute;
     font-size: 20px;
-    font-family: 'Tahoma', sans-serif;
+    font-family: "Tahoma", sans-serif;
 }
 
 .txtImgSelected {
@@ -62,10 +63,175 @@
     left: 95px;
 }
 
-.button{
+.button {
     height: auto;
     width: auto;
-    background:linear-gradient(45deg, #d6260b, #5b49de, #21f4df, #07c600);
+    background: linear-gradient(45deg, #d6260b, #5b49de, #21f4df, #07c600);
     background-size: 300% 300%;
     animation: color 6 ease-in-out infinite;
+}
+
+/* CSS Eve*/
+
+.container {
+    background-size: cover;
+    background: linear-gradient(45deg, #5b49de, #3be6d5);
+    animation: color 12 ease-in-out infinite;
+}
+
+h1 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 36px;
+    color: white;
+}
+
+h2 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 24px;
+    color: white;
+}
+
+h5 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+    color: white;
+}
+
+p {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: normal;
+    font-size: 20px;
+    color: white;
+}
+
+hr {
+    border: 3px solid white;
+}
+
+.text {
+    display: block;
+    align-items: center;
+    align-content: center;
+    position: relative;
+    text-align: center;
+}
+
+.card {
+    background: linear-gradient(to bottom,
+            rgb(91, 239, 255),
+            rgba(52, 74, 217, 0.158));
+}
+
+.card-title {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: normal;
+    font-size: 24px;
+    color: white;
+}
+
+.card-text {
+    text-align: justify;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+    color: white;
+}
+
+.btn-primary {
+    margin-left: 25px;
+    align-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 200px;
+    background-color: #5b49de;
+    border-color: #5b49de;
+}
+
+.range {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 200px;
+    margin-top: 10px;
+    transform: translate(-50%, -50%);
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    background: rgba(59, 173, 227, 1);
+    background: -moz-linear-gradient(45deg,
+            #21f4df 10%,
+            rgba(59, 173, 227, 1) 25%,
+            rgba(87, 111, 230, 1) 55%,
+            rgba(152, 68, 183, 1) 51%,
+            rgba(255, 53, 127, 1) 100%);
+    background: -webkit-gradient(left bottom,
+            right top,
+            color-stop(0%, rgba(59, 173, 227, 1)),
+            color-stop(25%, rgba(87, 111, 230, 1)),
+            color-stop(51%, rgba(152, 68, 183, 1)),
+            color-stop(100%, rgba(255, 53, 127, 1)));
+    background: -webkit-linear-gradient(45deg,
+            rgba(59, 173, 227, 1) 0%,
+            rgba(87, 111, 230, 1) 55%,
+            rgba(152, 68, 183, 1) 51%,
+            rgba(255, 53, 127, 1) 100%);
+    background: -o-linear-gradient(45deg,
+            rgba(59, 173, 227, 1) 0%,
+            rgba(87, 111, 230, 1) 55%,
+            rgba(152, 68, 183, 1) 51%,
+            rgba(255, 53, 127, 1) 100%);
+    background: -ms-linear-gradient(45deg,
+            rgba(59, 173, 227, 1) 0%,
+            rgba(87, 111, 230, 1) 55%,
+            rgba(152, 68, 183, 1) 65%,
+            rgba(255, 53, 127, 1) 100%);
+    background: linear-gradient(45deg,
+            rgba(59, 173, 227, 1) 15%,
+            rgba(87, 111, 230, 1) 35%,
+            rgba(152, 68, 183, 1) 65%,
+            rgba(255, 53, 127, 1) 120%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3bade3 ', endColorstr='#ff357f ', GradientType=1);
+    height: 16px;
+    border: 1px solid;
+    border-color: #21f4df;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: 2px solid;
+    border-color: #21f4df;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    max-width: 50px;
+    position: initial;
+    bottom: 10px;
+    background-color: #5b49de;
+    cursor: -webkit-grab;
+
+    -webkit-transition: border 1000ms ease;
+    transition: border 1000ms ease;
+}
+
+input[type="range"]::-moz-range-thumb {
+    -moz-appearance: none;
+    border: 2px solid;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    max-width: 50px;
+    position: relative;
+    bottom: 10px;
+    background-color: #393363;
+    cursor: -moz-grab;
+    -moz-transition: border 1000ms ease;
+    transition: border 1000ms ease;
 }
