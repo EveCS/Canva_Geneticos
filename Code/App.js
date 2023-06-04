@@ -1,59 +1,83 @@
-function getCoordinates() {
-    // Create a canvas element to display the image
-    var canvas = document.createElement('canvas');
-    document.body.appendChild(canvas);
-  
-    // Load the image
-    var imgElement = document.createElement('img');
-    imgElement.onload = function () {
-      // Create a new cv.Mat object from the image
-      var src = new cv.Mat(imgElement.height, imgElement.width, cv.CV_8UC4);
-      var srcData = new Uint8Array(imgElement.width * imgElement.height * 4);
-      var srcDataIndex = 0;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(imgElement, 0, 0);
-      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-      for (var i = 0; i < imageData.length; i += 4) {
-        srcData[srcDataIndex++] = imageData[i];
-        srcData[srcDataIndex++] = imageData[i + 1];
-        srcData[srcDataIndex++] = imageData[i + 2];
-        srcData[srcDataIndex++] = imageData[i + 3];
+
+
+function fitness(){
+  // Create a canvas element to display the images
+  var canvas = document.createElement('canvas');
+  document.body.appendChild(canvas);
+
+  // Load the first image
+  var imgElement1 = document.createElement('img');
+  imgElement1.onload = function () {
+    // Create a new cv.Mat object from the first image
+    var srcData1 = cv.imread(imgElement1);
+    var src1 = new cv.Mat();
+    cv.cvtColor(srcData1, src1, cv.COLOR_RGBA2RGB);
+
+    // Load the second image
+    var imgElement2 = document.createElement('img');
+    imgElement2.onload = function () {
+      // Create a new cv.Mat object from the second image
+      var srcData2 = cv.imread(imgElement2);
+      var src2 = new cv.Mat();
+      cv.cvtColor(srcData2, src2, cv.COLOR_RGBA2RGB);
+
+      // Compare the pixels of the two images
+      var equalPixels = 0;
+      var totalPixels = src1.rows * src1.cols;
+      for (var i = 0; i < totalPixels; i++) {
+        var pixel1 = src1.data[i];
+        var pixel2 = src2.data[i];
+        if (pixel1[0] === pixel2[0] && pixel1[1] === pixel2[1] && pixel1[2] === pixel2[2]) {
+          equalPixels++;
+        }
       }
-      src.data.set(srcData);
-  
-      // Convert the image to grayscale
-      var gray = new cv.Mat();
-      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-  
-      // Apply Canny edge detection
-      var edges = new cv.Mat();
-      cv.Canny(gray, edges, 50, 150);
-  
-      // Apply Hough Line Transform
-      var lines = new cv.Mat();
-      cv.HoughLinesP(edges, lines, 1, Math.PI / 180, 50, 50, 10);
-  
-      // Loop through the lines and get the coordinates
-      for (var i = 0; i < lines.rows; ++i) {
-        var startPoint = new cv.Point(lines.data32S[i * 4], lines.data32S[i * 4 + 1]);
-        var endPoint = new cv.Point(lines.data32S[i * 4 + 2], lines.data32S[i * 4 + 3]);
-  
-        // Display the coordinates of each line
-        console.log("Line " + (i + 1) + ":");
-        console.log("Start Point: (" + startPoint.x + ", " + startPoint.y + ")");
-        console.log("End Point: (" + endPoint.x + ", " + endPoint.y + ")");
-      }
-  
+
+      // Calculate the percentage of equal pixels
+      var equalPixelPercentage = (equalPixels / totalPixels) * 100;
+
+      // Display the result
+      console.log("Equal Pixels: " + equalPixels);
+      console.log("Total Pixels: " + totalPixels);
+      console.log("Equal Pixel Percentage: " + equalPixelPercentage.toFixed(2) + "%");
+
       // Clean up
-      src.delete();
-      gray.delete();
-      edges.delete();
-      lines.delete();
+      src1.delete();
+      src2.delete();
     };
-  
-    // Set the source image
-    imgElement.src = 'path_to_your_image.jpg';
-    
+
+    // Set the second source image
+    imgElement2.src = "/Image/ima02.jpg";
+  };
+
+  // Set the first source image
+  imgElement1.src = "/Image/ima02.jpg";
 }
 
+function compareImages() {
+  // Load the images
+  const img1 = document.createElement("img");
+  img1.src = "../Image/ima02.jpg";
+  const img2 = document.createElement("img");
+  img2.src = "../Image/ima02.jpg";
 
+  const image1 = cv.imread(img1);
+  const image2 = cv.imread(img2);
+
+  // Convert the images to grayscale
+  const grayImage1 = image1.cvtColor(cv.COLOR_BGR2GRAY);
+  const grayImage2 = image2.cvtColor(cv.COLOR_BGR2GRAY);
+
+  // Compute the absolute difference between the two images
+  const diff = cv.absdiff(grayImage1, grayImage2);
+
+  // Compute the sum of the differences
+  const sum = cv.sumElems(diff);
+
+  // Compute the percentage of differences
+  const percentage = (sum[0] / (grayImage1.size().height * grayImage1.size().width)) * 100;
+
+  // Return the percentage of differences
+  console.log("Percentage of differences: " + percentage.toFixed(1) + "%");
+  console.log("Percentage of similarity: " + (100 - percentage).toFixed(1) + "%");
+  return percentage;
+}
