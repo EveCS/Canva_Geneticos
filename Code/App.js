@@ -54,14 +54,16 @@ function fitness(){
 }
 
 function compareImages() {
-  // Load the images
-  const img1 = document.createElement("img");
-  img1.src = "../Image/ima02.jpg";
-  const img2 = document.createElement("img");
-  img2.src = "../Image/ima02.jpg";
 
-  const image1 = cv.imread(img1);
-  const image2 = cv.imread(img2);
+  var imgElement = document.createElement('img');
+  imgElement.src = "../Image/ima02.jpg";
+  image1 = cv.imread(imgElement);
+  
+
+  var imgElement2 = document.createElement('img');
+  imgElement2.src = "../Image/ima02.jpg";
+  image2 = cv.imread(imgElement2);
+  
 
   // Convert the images to grayscale
   const grayImage1 = image1.cvtColor(cv.COLOR_BGR2GRAY);
