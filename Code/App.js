@@ -1,12 +1,17 @@
-
+function openCvReady() {
+  cv['onRuntimeInitialized']=()=>{
+    fitness();
+  };
+}
 
 function fitness(){
+  
   // Create a canvas element to display the images
   var canvas = document.createElement('canvas');
   document.body.appendChild(canvas);
 
   // Load the first image
-  var imgElement1 = document.createElement('img');
+  var imgElement1 = document.getElementById('imgRepli');
   imgElement1.onload = function () {
     // Create a new cv.Mat object from the first image
     var srcData1 = cv.imread(imgElement1);
@@ -14,7 +19,7 @@ function fitness(){
     cv.cvtColor(srcData1, src1, cv.COLOR_RGBA2RGB);
 
     // Load the second image
-    var imgElement2 = document.createElement('img');
+    var imgElement2 = document.getElementById('imgGener');
     imgElement2.onload = function () {
       // Create a new cv.Mat object from the second image
       var srcData2 = cv.imread(imgElement2);
