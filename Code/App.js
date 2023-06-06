@@ -1,12 +1,17 @@
-
+function openCvReady() {
+  cv['onRuntimeInitialized']=()=>{
+    compareImages();
+  };
+}
 
 function fitness(){
+  
   // Create a canvas element to display the images
   var canvas = document.createElement('canvas');
   document.body.appendChild(canvas);
 
   // Load the first image
-  var imgElement1 = document.createElement('img');
+  var imgElement1 = document.getElementById('imgRepli');
   imgElement1.onload = function () {
     // Create a new cv.Mat object from the first image
     var srcData1 = cv.imread(imgElement1);
@@ -14,7 +19,7 @@ function fitness(){
     cv.cvtColor(srcData1, src1, cv.COLOR_RGBA2RGB);
 
     // Load the second image
-    var imgElement2 = document.createElement('img');
+    var imgElement2 = document.getElementById('imgGener');
     imgElement2.onload = function () {
       // Create a new cv.Mat object from the second image
       var srcData2 = cv.imread(imgElement2);
@@ -46,7 +51,7 @@ function fitness(){
     };
 
     // Set the second source image
-    imgElement2.src = "/Image/ima02.jpg";
+    imgElement2.src = "/Image/ima01.jpg";
   };
 
   // Set the first source image
@@ -66,17 +71,20 @@ function compareImages() {
   
 
   // Convert the images to grayscale
-  const grayImage1 = image1.cvtColor(cv.COLOR_BGR2GRAY);
-  const grayImage2 = image2.cvtColor(cv.COLOR_BGR2GRAY);
+  grayImage1 = new cv.Mat();
+  cv.cvtColor(image1, grayImage1, cv.COLOR_BGR2GRAY, 0);
+  grayImage2 = new cv.Mat();
+  cv.cvtColor(image2, grayImage2, cv.COLOR_BGR2GRAY, 0);
 
   // Compute the absolute difference between the two images
-  const diff = cv.absdiff(grayImage1, grayImage2);
+  diff = new cv.Mat();
+  cv.absdiff(grayImage1, grayImage2, diff);
 
   // Compute the sum of the differences
-  const sum = cv.sumElems(diff);
+  const suma = cv.sum(diff);
 
   // Compute the percentage of differences
-  const percentage = (sum[0] / (grayImage1.size().height * grayImage1.size().width)) * 100;
+  const percentage = (suma[0] / (grayImage1.size().height * grayImage1.size().width)) * 100;
 
   // Return the percentage of differences
   console.log("Percentage of differences: " + percentage.toFixed(1) + "%");
