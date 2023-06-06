@@ -1,6 +1,6 @@
 function openCvReady() {
   cv['onRuntimeInitialized']=()=>{
-    fitness();
+    compareImages();
   };
 }
 
@@ -51,7 +51,7 @@ function fitness(){
     };
 
     // Set the second source image
-    imgElement2.src = "/Image/ima02.jpg";
+    imgElement2.src = "/Image/ima01.jpg";
   };
 
   // Set the first source image
@@ -71,17 +71,20 @@ function compareImages() {
   
 
   // Convert the images to grayscale
-  const grayImage1 = image1.cvtColor(cv.COLOR_BGR2GRAY);
-  const grayImage2 = image2.cvtColor(cv.COLOR_BGR2GRAY);
+  grayImage1 = new cv.Mat();
+  cv.cvtColor(image1, grayImage1, cv.COLOR_BGR2GRAY, 0);
+  grayImage2 = new cv.Mat();
+  cv.cvtColor(image2, grayImage2, cv.COLOR_BGR2GRAY, 0);
 
   // Compute the absolute difference between the two images
-  const diff = cv.absdiff(grayImage1, grayImage2);
+  diff = new cv.Mat();
+  cv.absdiff(grayImage1, grayImage2, diff);
 
   // Compute the sum of the differences
-  const sum = cv.sumElems(diff);
+  const suma = cv.sum(diff);
 
   // Compute the percentage of differences
-  const percentage = (sum[0] / (grayImage1.size().height * grayImage1.size().width)) * 100;
+  const percentage = (suma[0] / (grayImage1.size().height * grayImage1.size().width)) * 100;
 
   // Return the percentage of differences
   console.log("Percentage of differences: " + percentage.toFixed(1) + "%");
