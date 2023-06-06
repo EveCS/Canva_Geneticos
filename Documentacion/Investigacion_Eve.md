@@ -234,3 +234,5 @@ use an edge detect algorithm on the image, then for each line I find the distanc
  ----------- IMPORTANTE  | RANGE ------------
  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range
  sacar porcentaje del range
+
+ 

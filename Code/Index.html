@@ -39,11 +39,11 @@
             <br />
             <div class="col">
                 <h5 class="text">Generaciones Máximas</h5>
-                <input type="number" min="0" class="form-control" placeholder="Ingrese cantidad" aria-label="Max. Generaciones">
+                <input type="number" id="genMaximas" min="0" class="form-control" placeholder="Ingrese cantidad" aria-label="Max. Generaciones">
             </div>
             <div class="col">
                 <h5 class="text">Individuos x Población</h5>
-                <input type="number" min="0" class="form-control" placeholder="Ingrese cantidad" aria-label="Individuos x Población">
+                <input type="number" id="indPoblacion" min="0" class="form-control" placeholder="Ingrese cantidad" aria-label="Individuos x Población">
             </div>
             <div class="col">
                 <h5 for="rangeIndElegir" class="text">% Individuos a Elegir</h5>
@@ -60,25 +60,28 @@
         </div>
         <div class="row align-items-center"><br /></div>
         <div class="row align-items-center">
-            <div class="col-9">
-                <br /><br /><br />
-                <h1>** Acá va imagen generada ***</h1>
+            <div class="col-6">
+                <canvas id="canvas"></canvas>
+                
             </div>
-            <div class="col-3">
+            <div class="col-6">
                 <br />
-                <div class="card" style="width: 18rem;">
-                    <img src="../Image/ima02.jpg" width="400px" class="img-fluid" alt="Imagen Replicar">
+                <div class="card" style="width: auto;">
                     <div class="card-body">
+                        <img id="myImage" src="../Image/ima03.jpg" sizes="300px" alt="Imagen">
                         <h5 class="card-title">Imagen a Replicar</h5>
-                        <p class="card-text">Recuerde cambiar la imagen actual por la imagen que desea generar en el Canva Genético.</p>
-                        <a href="#" class="btn btn-primary">Empezar</a>
+                        <p class="card-text">Recuerde cambiar la imagen por la que desea generar en el Canva Gen.</p>
+                        <a href="#" id="dibujar" class="btn btn-primary">Dibujar</a>
+                        <label for="strokeWidth" style="margin-left: 50px;">Trazo:</label>
+                        <input class="form-control" alt="Ingrese el grosor del trazo" input type="number" 
+                        id="strokeWidth" min="1" max="10" value="1" style="width: 60px; display: inline; margin-left: 20px;">                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    
+    <script src="genetico.js"></script>
 
 </body>
 
