@@ -1,4 +1,5 @@
 function callFitness() {
+  // Se usa esta función para llamar al Fitness
   cv['onRuntimeInitialized'] = () => {
     Fitness();
   };
