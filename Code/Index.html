@@ -14,11 +14,10 @@
 
     <!-- app js -->
     <script rel="stylesheet" src="./App.js"></script>
-
+    
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canva Genetico</title>
-
 
 </head>
 
@@ -47,15 +46,18 @@
             </div>
             <div class="col">
                 <h5 for="rangeIndElegir" class="text">% Individuos a Elegir</h5>
-                <input type="range" class="form-range"  min="0" max="10" step="2" id="rangeElegir">
+                <input type="range" class="form-range"  min="0" max="100" id="rangeElegir">
+                <span class="form-range-value" id="rangeElegir-value">0%</span>
             </div>
             <div class="col">
                 <h5 class="text">% Individuos a Mutar</h5>
-                <input type="range" class="form-range" min="0" max="10" step="2" id="rangeMutar">
+                <input type="range" class="form-range" min="0" max="100" id="rangeMutar">
+                <span class="form-range-value" id="rangeMutar-value">0%</span>
             </div>
             <div class="col">
                 <h5 class="text">% Individuos a Combinar</h5>
-                <input type="range" class="form-range"  min="0" max="10" step="2" id="rangeCombinar">
+                <input type="range" class="form-range"  min="0" max="100" id="rangeCombinar">
+                <span class="form-range-value" id="rangeCombinar-value">0%</span>
             </div>
         </div>
         <div class="row align-items-center"><br /></div>
@@ -71,10 +73,11 @@
                         <img id="myImage" src="../Image/ima03.jpg" sizes="300px" alt="Imagen">
                         <h5 class="card-title">Imagen a Replicar</h5>
                         <p class="card-text">Recuerde cambiar la imagen por la que desea generar en el Canva Gen.</p>
+                        <a href="#" id="initGen" class="btn btn-primary">Genético</a>
                         <a href="#" id="dibujar" class="btn btn-primary">Dibujar</a>
-                        <label for="strokeWidth" style="margin-left: 50px;">Trazo:</label>
+                        <label for="strokeWidth" style="margin-left: 10px;">Trazo:</label>
                         <input class="form-control" alt="Ingrese el grosor del trazo" input type="number" 
-                        id="strokeWidth" min="1" max="10" value="1" style="width: 60px; display: inline; margin-left: 20px;">                        
+                        id="strokeWidth" min="1" max="10" value="1" style="width: 60px; display: inline; margin-left: 10px;">                        
                     </div>
                 </div>
             </div>
