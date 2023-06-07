@@ -6,6 +6,8 @@ function callFitness() {
 
 function Fitness() {
 
+  // TODO: Cambiar la manera en la que el Fitness recibe las imágenes
+
   // Carga la imagen 1
   var imgElement = document.createElement('img');
   imgElement.src = "../Image/ima02.jpg";
