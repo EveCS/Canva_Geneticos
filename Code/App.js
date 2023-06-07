@@ -1,6 +1,6 @@
 function openCvReady() {
   cv['onRuntimeInitialized']=()=>{
-    compareImages();
+    fitness();
   };
 }
 
@@ -60,34 +60,38 @@ function fitness(){
 
 function compareImages() {
 
+  // Carga la imagen 1
   var imgElement = document.createElement('img');
   imgElement.src = "../Image/ima02.jpg";
   image1 = cv.imread(imgElement);
   
-
+  // Carga la imagen 2
   var imgElement2 = document.createElement('img');
   imgElement2.src = "../Image/ima02.jpg";
   image2 = cv.imread(imgElement2);
   
 
-  // Convert the images to grayscale
+  // Se convierte la imagen a escala de grises
   grayImage1 = new cv.Mat();
   cv.cvtColor(image1, grayImage1, cv.COLOR_BGR2GRAY, 0);
   grayImage2 = new cv.Mat();
   cv.cvtColor(image2, grayImage2, cv.COLOR_BGR2GRAY, 0);
 
-  // Compute the absolute difference between the two images
+  // Se calculan las "diferencias" entre las dos imágenes
   diff = new cv.Mat();
   cv.absdiff(grayImage1, grayImage2, diff);
 
-  // Compute the sum of the differences
-  const suma = cv.sum(diff);
+  console.log(diff);
 
-  // Compute the percentage of differences
-  const percentage = (suma[0] / (grayImage1.size().height * grayImage1.size().width)) * 100;
+  // Se realiza la suma de las diferencias
+  //const suma = cv.sumElems(diff);
+  const suma = cv.countNonZero(diff);
 
-  // Return the percentage of differences
-  console.log("Percentage of differences: " + percentage.toFixed(1) + "%");
-  console.log("Percentage of similarity: " + (100 - percentage).toFixed(1) + "%");
+  // Se calcula el porcentaje de diferencias
+  const percentage = (suma / (grayImage1.size().height * grayImage1.size().width)) * 100;
+
+  // Se muestra el resultado
+  console.log("Porcentaje de diferencias: " + percentage.toFixed(1) + "%");
+  console.log("porcentaje de similaridad: " + (100 - percentage).toFixed(1) + "%");
   return percentage;
 }
