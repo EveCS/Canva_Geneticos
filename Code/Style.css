@@ -144,12 +144,11 @@ hr {
 }
 
 .btn-primary {
-    margin-left: 25px;
     align-content: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     width: 200px;
     background-color: #5b49de;
-    border-color: #5b49de;
+    border-color: white;
 }
 
 .range {
@@ -232,4 +231,25 @@ input[type="range"]::-moz-range-thumb {
     cursor: -moz-grab;
     -moz-transition: border 1000ms ease;
     transition: border 1000ms ease;
+}
+
+input[type="file" i] {
+    background-color: #7869ec6b;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    background-color: initial;
+    cursor: default;
+    align-items: center;
+    width: 380px;
+}
+
+input[type=file]::file-selector-button {
+    background-color: #5b49de;
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 180px;
+}
+
+input[type=file]::file-selector-button:hover {
+    background-color: #0d6efd;
 }
