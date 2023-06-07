@@ -1,20 +1,45 @@
-// Investigar open cv para pintar los puntos de coordenadas
 
+
+// Investigar open cv para pintar los puntos de coordenadas
+const rangeInputs = document.querySelectorAll(".form-range");
 const image = document.getElementById("myImage");
 const btnInicio = document.getElementById("dibujar");
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 const strokeWidthInput = document.getElementById("strokeWidth");
 
+//Tomar los range inputs y validar que entre los tres sumen el 100%
+rangeInputs.forEach((input) => {
+    input.addEventListener("input", updateRanges);
+});
 
-/**
- * Description placeholder
- * @date 6/6/2023 - 8:40:46
- *
- * @param {*} dna
- * @param {*} objetivo
- * @returns {number}
- */
+function updateRanges() {
+    let total = 0;
+
+    rangeInputs.forEach((input) => {
+        total += parseInt(input.value);
+    });
+
+    if (total > 100) {
+        const changedInput = this.id;
+        const remainingValue = total - 100;
+
+        rangeInputs.forEach((input) => {
+            if (input.id !== changedInput) {
+                const currentValue = parseInt(input.value);
+                const newValue = currentValue - remainingValue / 2;
+
+                input.value = newValue;
+            }
+        });
+    }
+
+    rangeInputs.forEach((input) => {
+        const valueSpan = document.getElementById(input.id + "-value");
+        valueSpan.textContent = input.value + "%";
+    });
+}
+
 function fitness(dna, objetivo) {
     // Calcula la puntuación de fitness de un ADN basada en la cantidad de números de la lista objetivo que coinciden
     let puntaje = 0;
@@ -26,15 +51,6 @@ function fitness(dna, objetivo) {
     return puntaje / objetivo.length;
 }
 
-
-/**
- * Description placeholder
- * @date 6/6/2023 - 8:40:58
- *
- * @param {*} padreUno
- * @param {*} padreDos
- * @returns {{}}
- */
 function reproduce(padreUno, padreDos) {
     // Produce un hijo recombinando los genes de los dos padres
     let hijo = [];
@@ -48,15 +64,6 @@ function reproduce(padreUno, padreDos) {
     return hijo;
 }
 
-
-/**
- * Description placeholder
- * @date 6/6/2023 - 8:41:06
- *
- * @param {*} dna
- * @param {*} rangoMutacion
- * @returns {{}}
- */
 function mutar(dna, rangoMutacion) {
     // Aplica mutaciones aleatorias a un ADN
     let dnaMutado = [];
@@ -70,16 +77,6 @@ function mutar(dna, rangoMutacion) {
     return dnaMutado;
 }
 
-
-/**
- * Description placeholder
- * @date 6/6/2023 - 8:41:25
- *
- * @param {*} objetivo
- * @param {*} tamPoblacion
- * @param {*} rangoMutacion
- * @returns {{}}
- */
 function algoritmoGenetico(objetivo, tamPoblacion, rangoMutacion) {
     // Ejecuta un algoritmo genético para encontrar una lista de ADN que coincida con la lista objetivo.
     // Generar la población inicial de ADN como arreglos de números aleatorios
@@ -124,14 +121,6 @@ function algoritmoGenetico(objetivo, tamPoblacion, rangoMutacion) {
     }
 }
 
-
-/**
- * Description placeholder
- * @date 6/6/2023 - 8:41:40
- *
- * @param {*} items
- * @returns {number}
- */
 function randomChoice(items) {
     // Elige un elemento aleatorio de la lista de items basado en los pesos proporcionados
     let sum = items.reduce((a, b) => a + b, 0);
@@ -145,12 +134,21 @@ function randomChoice(items) {
     }
 }
 
+/** .------------- PRUEBA GENETICO -----------------. */
+// Iniciar con lista dada como objetivo
+let listaObj = [100, 23, 4, 56, 123, 456];
+let resultado, generaciones;
+[resultado, generaciones] = algoritmoGenetico(listaObj, 100, 0.01);
+console.log("Objetivo:", listaObj);
+console.log("Resultado hijo:", resultado);
+console.log("generaciones: ", generaciones);
 
 /* ----------------------------- PINTADO CANVAS | EVE ------------------------------------------ */
 
 // JavaScript code para obtener los píxeles negros de la imagen y pintarlos en el canvas
 
 btnInicio.addEventListener("click", () => {
+
     canvas.width = image.width;
     canvas.height = image.height;
 
@@ -206,11 +204,59 @@ btnInicio.addEventListener("click", () => {
 });
 
 
-/** .------------- PRUEBA GENETICO -----------------. */
-// Iniciar con lista dada como objetivo
-let listaObj = [100, 23, 4, 56, 123, 456];
-let resultado, generaciones;
-[resultado, generaciones] = algoritmoGenetico(listaObj, 100, 0.01);
-console.log('Objetivo:', listaObj);
-console.log('Resultado hijo:', resultado);
-console.log('generaciones: ', generaciones);
+/* ----------------------------- LLAMADO GENETICO | EVE ------------------------------------------ */
+btnGenetico.addEventListener("click", () => {
+
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    context.drawImage(image, 0, 0);
+
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    const blackPixels = [];
+
+    for (let y = 0; y < canvas.height; y++) {
+        for (let x = 0; x < canvas.width; x++) {
+            const pixelIndex = (y * canvas.width + x) * 4;
+            const red = data[pixelIndex];
+            const green = data[pixelIndex + 1];
+            const blue = data[pixelIndex + 2];
+            const alpha = data[pixelIndex + 3];
+
+            if (red === 0 && green === 0 && blue === 0 && alpha === 255) {
+                blackPixels.push({ x, y });
+            }
+        }
+    }
+
+    // Función para pintar los píxeles negros en el canvas con el grosor de trazo especificado
+    function paintPixels(pixels, strokeWidth) {
+        const halfStrokeWidth = strokeWidth / 2;
+
+        context.fillStyle = "black";
+        context.imageSmoothingEnabled = true;
+
+        for (let i = 0; i < pixels.length; i++) {
+            const { x, y } = pixels[i];
+            context.fillRect(
+                x - halfStrokeWidth,
+                y - halfStrokeWidth,
+                strokeWidth,
+                strokeWidth
+            );
+        }
+    }
+
+    const initialStrokeWidth = parseInt(strokeWidthInput.value);
+    paintPixels(blackPixels, initialStrokeWidth);
+
+    // Actualizar el grosor del trazo al cambiar el valor del input
+    strokeWidthInput.addEventListener("change", () => {
+        const strokeWidth = parseInt(strokeWidthInput.value);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(image, 0, 0);
+        paintPixels(blackPixels, strokeWidth);
+    });
+});
