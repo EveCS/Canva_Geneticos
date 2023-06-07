@@ -15,6 +15,7 @@
     <!-- app js -->
     <script rel="stylesheet" src="./App.js"></script>
     
+    <script async src="js/opencv.js" onload="opencvcheck()" type="text/javascript"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canva Genetico</title>
@@ -64,26 +65,30 @@
         <div class="row align-items-center">
             <div class="col-6">
                 <canvas id="canvas"></canvas>
-                
+                <canvas id="canvasOutput"></canvas>
             </div>
-            <div class="col-6">
+            <div class="col-6 align-items-center">
                 <br />
                 <div class="card" style="width: auto;">
                     <div class="card-body">
-                        <img id="myImage" src="../Image/ima03.jpg" sizes="300px" alt="Imagen">
-                        <h5 class="card-title">Imagen a Replicar</h5>
-                        <p class="card-text">Recuerde cambiar la imagen por la que desea generar en el Canva Gen.</p>
-                        <a href="#" id="initGen" class="btn btn-primary">Genético</a>
-                        <a href="#" id="dibujar" class="btn btn-primary">Dibujar</a>
-                        <label for="strokeWidth" style="margin-left: 10px;">Trazo:</label>
-                        <input class="form-control" alt="Ingrese el grosor del trazo" input type="number" 
-                        id="strokeWidth" min="1" max="10" value="1" style="width: 60px; display: inline; margin-left: 10px;">                        
+                        <h5 class="card-title" style="color: #5b49de; font-weight:bold; font-size: 40px;">Imagen a Replicar</h5>
+
+                        <canvas id="canvasInput"></canvas><br/>
+                        <br/><input class="form-control" style="display:inline;margin-left: 10px;" type="file" accept="image/*" onchange="loadImage(event)">
+                        <a id="initGen" class="btn btn-primary">Genético</a>   
                     </div>
+                    <div>
+                        <br/>
+                        <p style="display: inline;" >Tiempo total: </p>
+                        <h2 style="display: inline;" id="cronometro">00:00:00</h2>
+                        <br/>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
-
+    <h5 id="checker" style="color: rgb(212, 195, 228);">OpenCv is loading.....</h2>
     <script src="genetico.js"></script>
 
 </body>

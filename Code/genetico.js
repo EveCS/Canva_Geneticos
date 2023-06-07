@@ -1,12 +1,62 @@
-
-
 // Investigar open cv para pintar los puntos de coordenadas
+
+//RangeInputs del html
 const rangeInputs = document.querySelectorAll(".form-range");
-const image = document.getElementById("myImage");
-const btnInicio = document.getElementById("dibujar");
-const canvas = document.getElementById("canvas");
+const btnInicio = document.getElementById("initGen");
+
+//Declarar variables informacion dada por el usuario
+let maximaPoblacion, individuosPoblacion;
+let individuosElegir, individuosMutar, individuosCombinar;
+
+//Canvas tanto el de entrada como el de salida, crear la imagen
 const context = canvas.getContext("2d");
 const strokeWidthInput = document.getElementById("strokeWidth");
+const canvasInput = document.getElementById('canvasInput');
+const canvasOutput = document.getElementById('canvasOutput');
+const image = new Image();
+
+//Variables de cronometro y opencv
+let isOpencvReady = false;
+let cronometro;
+let segundos = 0;
+let tiempoGen = [];
+
+
+let src, dst, contours, hierarchy;
+
+function opencvcheck() {
+    isOpencvReady = true;
+    document.getElementById('checker').innerHTML = "Opencv is Ready."
+}
+
+
+function loadImage(event) {
+    if (!isOpencvReady) {
+        console.log("OpenCV.js is not ready yet.");
+        return;
+    }
+
+
+    const file = event.target.files[0];
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+
+        image.onload = function () {
+            canvasInput.width = image.width;
+            canvasInput.height = image.height;
+            canvasOutput.width = image.width;
+            canvasOutput.height = image.height;
+
+            const ctxInput = canvasInput.getContext('2d');
+            ctxInput.drawImage(image, 0, 0);
+
+        };
+        image.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
 
 //Tomar los range inputs y validar que entre los tres sumen el 100%
 rangeInputs.forEach((input) => {
@@ -143,120 +193,42 @@ console.log("Objetivo:", listaObj);
 console.log("Resultado hijo:", resultado);
 console.log("generaciones: ", generaciones);
 
-/* ----------------------------- PINTADO CANVAS | EVE ------------------------------------------ */
 
-// JavaScript code para obtener los píxeles negros de la imagen y pintarlos en el canvas
+/* ----------------------------- FUNCION PRINCIPAL GENETICO | EVE ------------------------------------------ */
+btnInicio.addEventListener("click", () => { 
+    start();
+    //Inputs del html
+    maximaPoblacion = document.getElementById("genMaximas").value;
+    individuosPoblacion = document.getElementById("indPoblacion").value;
 
-btnInicio.addEventListener("click", () => {
-
-    canvas.width = image.width;
-    canvas.height = image.height;
-
-    context.drawImage(image, 0, 0);
-
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-
-    const blackPixels = [];
-
-    for (let y = 0; y < canvas.height; y++) {
-        for (let x = 0; x < canvas.width; x++) {
-            const pixelIndex = (y * canvas.width + x) * 4;
-            const red = data[pixelIndex];
-            const green = data[pixelIndex + 1];
-            const blue = data[pixelIndex + 2];
-            const alpha = data[pixelIndex + 3];
-
-            if (red === 0 && green === 0 && blue === 0 && alpha === 255) {
-                blackPixels.push({ x, y });
-            }
-        }
-    }
-
-    // Función para pintar los píxeles negros en el canvas con el grosor de trazo especificado
-    function paintPixels(pixels, strokeWidth) {
-        const halfStrokeWidth = strokeWidth / 2;
-
-        context.fillStyle = "black";
-        context.imageSmoothingEnabled = true;
-
-        for (let i = 0; i < pixels.length; i++) {
-            const { x, y } = pixels[i];
-            context.fillRect(
-                x - halfStrokeWidth,
-                y - halfStrokeWidth,
-                strokeWidth,
-                strokeWidth
-            );
-        }
-    }
-
-    const initialStrokeWidth = parseInt(strokeWidthInput.value);
-    paintPixels(blackPixels, initialStrokeWidth);
-
-    // Actualizar el grosor del trazo al cambiar el valor del input
-    strokeWidthInput.addEventListener("change", () => {
-        const strokeWidth = parseInt(strokeWidthInput.value);
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(image, 0, 0);
-        paintPixels(blackPixels, strokeWidth);
-    });
+    individuosElegir = document.getElementById("rangeElegir").value;
+    individuosMutar  = document.getElementById("rangeMutar").value;
+    individuosCombinar  = document.getElementById("rangeCombinar").value;
+    console.log("max pob ", maximaPoblacion, " ind pob ", individuosPoblacion);
+    console.log("% elegir: ", individuosElegir, " mutar ", individuosMutar, " comb ", individuosCombinar);
+    //stop();
 });
 
 
-/* ----------------------------- LLAMADO GENETICO | EVE ------------------------------------------ */
-btnGenetico.addEventListener("click", () => {
+/* --------------------------------- Funciones cronometro -------------------------------------- */
 
-    canvas.width = image.width;
-    canvas.height = image.height;
+function iniciarCronometro() {
+    const cronometroElemento = document.getElementById("cronometro");
+    segundos++;
+    const horas = Math.floor(segundos / 3600);
+    const minutos = Math.floor((segundos % 3600) / 60);
+    const seg = segundos % 60;
+    cronometroElemento.textContent = `${agregarCeros(horas)}:${agregarCeros(minutos)}:${agregarCeros(seg)}`;
+}
 
-    context.drawImage(image, 0, 0);
+function start() {
+    cronometro = setInterval(iniciarCronometro, 1000);
+}
 
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
+function stop() {
+    clearInterval(cronometro);
+}
 
-    const blackPixels = [];
-
-    for (let y = 0; y < canvas.height; y++) {
-        for (let x = 0; x < canvas.width; x++) {
-            const pixelIndex = (y * canvas.width + x) * 4;
-            const red = data[pixelIndex];
-            const green = data[pixelIndex + 1];
-            const blue = data[pixelIndex + 2];
-            const alpha = data[pixelIndex + 3];
-
-            if (red === 0 && green === 0 && blue === 0 && alpha === 255) {
-                blackPixels.push({ x, y });
-            }
-        }
-    }
-
-    // Función para pintar los píxeles negros en el canvas con el grosor de trazo especificado
-    function paintPixels(pixels, strokeWidth) {
-        const halfStrokeWidth = strokeWidth / 2;
-
-        context.fillStyle = "black";
-        context.imageSmoothingEnabled = true;
-
-        for (let i = 0; i < pixels.length; i++) {
-            const { x, y } = pixels[i];
-            context.fillRect(
-                x - halfStrokeWidth,
-                y - halfStrokeWidth,
-                strokeWidth,
-                strokeWidth
-            );
-        }
-    }
-
-    const initialStrokeWidth = parseInt(strokeWidthInput.value);
-    paintPixels(blackPixels, initialStrokeWidth);
-
-    // Actualizar el grosor del trazo al cambiar el valor del input
-    strokeWidthInput.addEventListener("change", () => {
-        const strokeWidth = parseInt(strokeWidthInput.value);
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(image, 0, 0);
-        paintPixels(blackPixels, strokeWidth);
-    });
-});
+function agregarCeros(numero) {
+    return numero < 10 ? `0${numero}` : numero;
+}
