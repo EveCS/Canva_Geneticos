@@ -1,11 +1,11 @@
 function openCvReady() {
-  cv['onRuntimeInitialized']=()=>{
-    compareImages();
+  cv['onRuntimeInitialized'] = () => {
+    fitness2();
   };
 }
 
-function fitness(){
-  
+function fitness() {
+
   // Create a canvas element to display the images
   var canvas = document.createElement('canvas');
   document.body.appendChild(canvas);
@@ -64,12 +64,12 @@ function compareImages() {
   var imgElement = document.createElement('img');
   imgElement.src = "../Image/ima02.jpg";
   image1 = cv.imread(imgElement);
-  
+
   // Carga la imagen 2
   var imgElement2 = document.createElement('img');
   imgElement2.src = "../Image/ima02.jpg";
   image2 = cv.imread(imgElement2);
-  
+
 
   // Se convierte la imagen a escala de grises
   grayImage1 = new cv.Mat();
@@ -91,4 +91,76 @@ function compareImages() {
   console.log("Porcentaje de diferencias: " + percentage.toFixed(1) + "%");
   console.log("porcentaje de similaridad: " + (100 - percentage).toFixed(1) + "%");
   return percentage;
+}
+
+function fitness2() {
+  // Load the two images
+
+  // Carga la imagen 1
+  var imgElement = document.createElement('img');
+  imgElement.src = "../Image/ima02.jpg";
+  imgElement.onload = function () {
+    img1 = cv.imread(imgElement);
+    console.log(img1);
+    console.log("Img1 cols: " + img1.cols);
+    console.log("Img1 rows: " + img1.rows);
+
+    // Carga la imagen 2
+    var imgElement2 = document.createElement('img');
+    imgElement2.src = "../Image/ima06.jpg";
+    imgElement2.onload = function () {
+      img2 = cv.imread(imgElement2);
+      console.log(img2);
+      console.log("Img2 cols: " + img2.cols);
+      console.log("Img2 rows: " + img2.rows);
+
+
+      /*
+      // Compare dimensions and resize if necessary
+      if (img1.cols !== img2.cols || img1.rows !== img2.rows) {
+        cv.resize(img2, img2, new cv.Size(img1.cols, img1.rows));
+      }
+      // Error: The source width is 0.
+      */
+
+      if (img1.cols > img2.cols || img1.rows > img2.rows) {
+        cv.resize(img1, img1, new cv.Size(img2.cols, img2.rows));
+        console.log("Resized > Img1 cols: " + img1.cols);
+        console.log("Resized > Img1 rows: " + img1.rows);
+      }
+      if(img2.cols > img1.cols || img2.rows > img1.rows){
+        cv.resize(img2, img2, new cv.Size(img1.cols, img1.rows));
+        console.log("Resized > Img2 cols: " + img2.cols);
+        console.log("Resized > Img2 rows: " + img2.rows);
+      }
+
+      // Convert images to grayscale
+      const grayImg1 = new cv.Mat();
+      const grayImg2 = new cv.Mat();
+      cv.cvtColor(img1, grayImg1, cv.COLOR_RGBA2GRAY);
+      cv.cvtColor(img2, grayImg2, cv.COLOR_RGBA2GRAY);
+
+      // Compute absolute difference
+      const diff = new cv.Mat();
+      cv.absdiff(grayImg1, grayImg2, diff);
+
+      // Threshold the difference image
+      const binaryDiff = new cv.Mat();
+      cv.threshold(diff, binaryDiff, 0, 255, cv.THRESH_BINARY);
+
+      // Count non-zero pixels
+      const diffPixels = cv.countNonZero(binaryDiff);
+
+      // Clean up
+      img1.delete();
+      img2.delete();
+      grayImg1.delete();
+      grayImg2.delete();
+      diff.delete();
+      binaryDiff.delete();
+
+      // Output the number of different pixels
+      console.log('Number of different pixels:', diffPixels);
+    };
+  };
 }
