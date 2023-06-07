@@ -1,30 +1,34 @@
 function openCvReady() {
-  cv['onRuntimeInitialized']=()=>{
+  cv['onRuntimeInitialized'] = () => {
     fitness();
   };
 }
 
-function fitness(){
-  
+function fitness() {
   // Create a canvas element to display the images
   var canvas = document.createElement('canvas');
   document.body.appendChild(canvas);
 
   // Load the first image
-  var imgElement1 = document.getElementById('imgRepli');
+  var imgElement1 = document.createElement('img');
+  imgElement1.src = "../Image/ima03.jpg";
+
   imgElement1.onload = function () {
     // Create a new cv.Mat object from the first image
     var srcData1 = cv.imread(imgElement1);
     var src1 = new cv.Mat();
-    cv.cvtColor(srcData1, src1, cv.COLOR_RGBA2RGB);
+    //cv.cvtColor(srcData1, src1, cv.COLOR_RGBA2GRAY);
+    
 
     // Load the second image
-    var imgElement2 = document.getElementById('imgGener');
+    var imgElement2 = document.createElement('img');
+    imgElement2.src = "../Image/ima04.jpg";
+    
     imgElement2.onload = function () {
       // Create a new cv.Mat object from the second image
       var srcData2 = cv.imread(imgElement2);
       var src2 = new cv.Mat();
-      cv.cvtColor(srcData2, src2, cv.COLOR_RGBA2RGB);
+      //cv.cvtColor(srcData2, src2, cv.COLOR_RGBA2GRAY);
 
       // Compare the pixels of the two images
       var equalPixels = 0;
@@ -49,13 +53,7 @@ function fitness(){
       src1.delete();
       src2.delete();
     };
-
-    // Set the second source image
-    imgElement2.src = "/Image/ima01.jpg";
   };
-
-  // Set the first source image
-  imgElement1.src = "/Image/ima02.jpg";
 }
 
 function compareImages() {
@@ -64,12 +62,12 @@ function compareImages() {
   var imgElement = document.createElement('img');
   imgElement.src = "../Image/ima02.jpg";
   image1 = cv.imread(imgElement);
-  
+
   // Carga la imagen 2
   var imgElement2 = document.createElement('img');
   imgElement2.src = "../Image/ima02.jpg";
   image2 = cv.imread(imgElement2);
-  
+
 
   // Se convierte la imagen a escala de grises
   grayImage1 = new cv.Mat();
