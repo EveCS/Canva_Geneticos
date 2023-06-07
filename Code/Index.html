@@ -71,17 +71,20 @@
                 <br />
                 <div class="card" style="width: auto;">
                     <div class="card-body">
-                        <h5 class="card-title" style="color: #5b49de; font-weight:bold; font-size: 40px;">Imagen a Replicar</h5>
+                        <h5 class="card-title" style="font-weight:bold; font-size: 40px;">Imagen a Replicar</h5>
 
                         <canvas id="canvasInput"></canvas><br/>
                         <br/><input class="form-control" style="display:inline;margin-left: 10px;" type="file" accept="image/*" onchange="loadImage(event)">
                         <a id="initGen" class="btn btn-primary">Genético</a>   
                     </div>
-                    <div>
+                    <div class="text">
                         <br/>
                         <p style="display: inline;" >Tiempo total: </p>
                         <h2 style="display: inline;" id="cronometro">00:00:00</h2>
-                        <br/>
+                        <h2 style="display: inline;"> | </h2>
+                        <p style="display: inline;">Promedio Gen: </p>
+                        <h2 style="display: inline;" id="promedioGen">00:00:00</h2>
+                        <br/><br/>
                     </div>
                     
                 </div>
