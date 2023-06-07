@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Suma 100% con Input Ranges</title>
+  <style>
+    .range-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .range-input {
+      width: 200px;
+    }
+
+    .range-value {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="range-container">
+    <input type="range" id="range1" min="0" max="100" value="0" class="range-input">
+    <span class="range-value" id="range1-value">0%</span>
+  </div>
+
+  <div class="range-container">
+    <input type="range" id="range2" min="0" max="100" value="0" class="range-input">
+    <span class="range-value" id="range2-value">0%</span>
+  </div>
+
+  <div class="range-container">
+    <input type="range" id="range3" min="0" max="100" value="0" class="range-input">
+    <span class="range-value" id="range3-value">0%</span>
+  </div>
+
+  <script>
+    const rangeInputs = document.querySelectorAll('.range-input');
+
+    rangeInputs.forEach(input => {
+      input.addEventListener('input', updateRanges);
+    });
+
+    function updateRanges() {
+      let total = 0;
+
+      rangeInputs.forEach(input => {
+        total += parseInt(input.value);
+      });
+
+      if (total > 100) {
+        const changedInput = this.id;
+        const remainingValue = total - 100;
+
+        rangeInputs.forEach(input => {
+          if (input.id !== changedInput) {
+            const currentValue = parseInt(input.value);
+            const newValue = currentValue - (remainingValue / 2);
+
+            input.value = newValue;
+          }
+        });
+      }
+
+      rangeInputs.forEach(input => {
+        const valueSpan = document.getElementById(input.id + '-value');
+        valueSpan.textContent = input.value + '%';
+      });
+    }
+  </script>
+</body>
+</html>

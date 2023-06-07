@@ -71,7 +71,7 @@
     animation: color 6 ease-in-out infinite;
 }
 
-/* CSS Eve*/
+/* ---------------- CSS Eve ------------------ */
 
 .container {
     background-size: cover;
@@ -95,7 +95,7 @@ h2 {
     color: white;
 }
 
-h5 {
+h5, label {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: normal;
     font-size: 16px;
@@ -147,7 +147,7 @@ hr {
     margin-left: 25px;
     align-content: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    width: 200px;
+    width: 350px;
     background-color: #5b49de;
     border-color: #5b49de;
 }
