@@ -25,6 +25,13 @@ let tiempoGen = [];
 
 let src, dst, contours, hierarchy;
 
+//Variables cronometro
+let start_principal, end_principal;
+let total_principal;
+
+let start_prom, end_prom, total_prom;
+let promedio = [];
+
 function opencvcheck() {
     isOpencvReady = true;
     document.getElementById('checker').innerHTML = "Opencv is Ready."
@@ -94,7 +101,6 @@ function updateRanges() {
 
 /* ----------------------------- FUNCION PRINCIPAL GENETICO | Evento boton  ------------------------------------------ */
 btnInicio.addEventListener("click", () => {
-    start();
     //Inputs del html para guardar en variables uso del genetico dadas por el usuario
     generacionMaxima = document.getElementById("genMaximas").value;
     individuosPoblacion = document.getElementById("indPoblacion").value;
@@ -108,31 +114,32 @@ btnInicio.addEventListener("click", () => {
     // Ejecutar el algoritmo genético con los parámetros deseados
     iniciarAlgGenetico(generacionMaxima, individuosPoblacion, individuosElegir, individuosMutar, individuosCombinar);
 
-    //stop(); // Detener cronometro
+    // ---- Tiempo cronometrado de la duracion de las funciones ----
+
+    // Calcular minutos, segundos y milisegundos
+    var minutes = Math.floor(total_principal / 60000);
+    var seconds = Math.floor((total_principal % 60000) / 1000);
+    var milliseconds = total_principal % 1000;
+
+    // Actualizar el elemento HTML con el tiempo de ejecución formateado
+    var executionTimeElement = document.getElementById('tiempoTotal');
+    executionTimeElement.textContent = `${minutes} min ${seconds} seg ${milliseconds} ms`;
+    
+    // Calcular el promedio de los tiempos
+    var suma = promedio.reduce(function (a, b) {
+        return a + b;
+    }, 0);
+
+    var promedioTiempos = suma / promedio.length;
+
+    var minutes_prom = Math.floor(promedioTiempos / 60000);
+    var seconds_prom = Math.floor((promedioTiempos % 60000) / 1000);
+    var milliseconds_prom = promedioTiempos % 1000;
+
+    // Actualizar el elemento HTML con el tiempo de ejecución formateado
+    var promTimeElement = document.getElementById('tiempoPromedio');
+    promTimeElement.textContent = `${minutes_prom} min ${seconds_prom} seg ${milliseconds_prom} ms`;
 });
-
-
-/* --------------------------------- Funciones cronometro -------------------------------------- */
-
-function iniciarCronometro() {
-    const cronometroElemento = document.getElementById("cronometro");
-    segundos++;
-    const minutos = Math.floor(segundos / 60);
-    const seg = segundos % 60;
-    cronometroElemento.textContent = `${agregarCeros(minutos)}:${agregarCeros(seg)}`;
-}
-
-function start() {
-    cronometro = setInterval(iniciarCronometro, 1000);
-}
-
-function stop() {
-    clearInterval(cronometro);
-}
-
-function agregarCeros(numero) {
-    return numero < 10 ? `0${numero}` : numero;
-}
 
 // ----------------------------- ALGORITMO GENETICO -----------------------------------
 
@@ -243,6 +250,7 @@ function crearSigGeneracion(poblacion, puntajeSeleccion, rangoMutacion, rangoCom
 
 // Función principal
 function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, rangoMutacion, rangoCombinacion) {
+    start_principal = Date.now();
     let generacion = 1;
     let poblacion = [];
 
@@ -254,12 +262,13 @@ function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, ran
 
     // Iterar hasta alcanzar el máximo de generaciones
     while (generacion <= maxGeneraciones) {
+        start_prom = performance.now();
         console.log('Generacion:', generacion);
 
         // Calcular la puntuación fitness para cada individuo
         for (const individuo of poblacion) {
             // TODO: Llamada a funcion de dibujo
-            individuo.fitness = Fitness(individuo); //TODO: Pasar parámetro correcto
+            individuo.fitness = calcularFitness(individuo); //TODO: Pasar parámetro correcto
         }
 
         // Ordenar la población según la puntuación fitness (en orden ascendente)
@@ -267,12 +276,17 @@ function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, ran
 
         // Mostrar el individuo con la mejor puntuación fitness
         console.log('Mejor individuo:', poblacion[0]);
-        
+
         // Generar la siguiente generación
         poblacion = crearSigGeneracion(poblacion, puntajeSeleccion, rangoMutacion, rangoCombinacion);
 
         generacion++;
+        end_prom = performance.now();
+        let prom = end_prom - start_prom;
+        promedio.push(prom);
     }
+    end_principal = Date.now();
+    total_principal = end_principal - start_principal;
 }
 
 function Fitness(imgGenerated) {
