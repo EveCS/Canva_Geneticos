@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cronómetro</title>
+</head>
+<body>
+  <h1>Cronómetro</h1>
+  <p id="timer">00:00:00</p>
+
+  <script>
+    var startTime; // Variable para almacenar el tiempo de inicio
+    var timerInterval; // Variable para almacenar el intervalo del cronómetro
+
+    function startTimer() {
+      startTime = Date.now(); // Guardar el tiempo de inicio actual
+      timerInterval = setInterval(updateTimer, 1000); // Iniciar el intervalo del cronómetro
+
+      // Llamar a tu función aquí
+      tuFuncion(stopTimer); // Pasar stopTimer como argumento a tu función
+    }
+
+    async function tuFuncion(callback) {
+      let suma=0;
+      for(let i=0; i<100; i++) suma=suma+i;
+
+      console.log(suma);
+      await 15 ;
+      callback();
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval); // Detener el intervalo del cronómetro
+    }
+
+    function updateTimer() {
+      var elapsedTime = Date.now() - startTime; // Calcular el tiempo transcurrido en milisegundos
+
+      // Convertir el tiempo transcurrido a formato HH:MM:SS
+      var hours = Math.floor(elapsedTime / 3600000);
+      var minutes = Math.floor((elapsedTime % 3600000) / 60000);
+      var seconds = Math.floor((elapsedTime % 60000) / 1000);
+
+      // Agregar ceros a la izquierda si es necesario
+      hours = hours.toString().padStart(2, '0');
+      minutes = minutes.toString().padStart(2, '0');
+      seconds = seconds.toString().padStart(2, '0');
+
+      var timerElement = document.getElementById('timer');
+      timerElement.textContent = hours + ':' + minutes + ':' + seconds; // Actualizar el elemento HTML del cronómetro
+    }
+
+    startTimer(); // Iniciar el cronómetro al cargar la página
+  </script>
+</body>
+</html>
