@@ -277,8 +277,10 @@ function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, ran
 
         // Calcular la puntuación fitness para cada individuo
         for (const individuo of poblacion) {
-            // TODO: Llamada a funcion de dibujo
-            individuo.fitness = calcularFitness(individuo); //TODO: Pasar parámetro correcto
+            // Se llama a la función de dibujo y se le pasa el individuo
+            let imgGenerated = draw(individuo);
+            // El resultado se le pasa al Fitness() para que determine el puntaje recibido en comparación con la imagen objetivo
+            individuo.fitness = Fitness(imgGenerated);
         }
 
         // Ordenar la población según la puntuación fitness (en orden ascendente)
