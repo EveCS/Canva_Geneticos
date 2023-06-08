@@ -159,7 +159,7 @@ function createRandomindividuo() {
 }
 
 // Función para calcular la puntuación de un individuo ( la distancia total entre los puntos)
-function calculateFitness(individuo) {
+function calcularFitness(individuo) {
     let distanciaTotal = 0;
 
     for (let i = 1; i < individuo.length; i++) {
@@ -258,7 +258,7 @@ function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, ran
 
         // Calcular la puntuación fitness para cada individuo
         for (const individuo of poblacion) {
-            individuo.fitness = calculateFitness(individuo);
+            individuo.fitness = calcularFitness(individuo);
         }
 
         // Ordenar la población según la puntuación fitness (en orden ascendente)
@@ -266,6 +266,7 @@ function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, ran
 
         // Mostrar el individuo con la mejor puntuación fitness
         console.log('Mejor individuo:', poblacion[0]);
+        
         // Generar la siguiente generación
         poblacion = crearSigGeneracion(poblacion, puntajeSeleccion, rangoMutacion, rangoCombinacion);
 
