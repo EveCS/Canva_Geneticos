@@ -373,6 +373,11 @@ function Fitness(img2) {
         binaryDiff.delete();
 
         // Imprime y retorna los resultados
+
+        if (!(diffPixels > 0)){
+            diffPixels = (img2.cols * img2.rows);
+        }
+
         console.log("Número de pixeles diferentes entre las dos imágenes:" + diffPixels + "px");
         return diffPixels;
 
