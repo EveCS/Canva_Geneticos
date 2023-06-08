@@ -16,6 +16,7 @@
     <script rel="stylesheet" src="./App.js"></script>
     
     <script async src="js/opencv.js" onload="opencvcheck()" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canva Genetico</title>
@@ -64,8 +65,9 @@
         <div class="row align-items-center"><br /></div>
         <div class="row align-items-center">
             <div class="col-6">
-                <canvas id="canvas"></canvas>
+                
                 <canvas id="canvasOutput"></canvas>
+
             </div>
             <div class="col-6 align-items-center">
                 <br />
@@ -86,12 +88,15 @@
                         <p style="display: inline;" id="tiempoPromedio">Promedio entre generaciones</p>
                         <br/><br/>
                         <a id="grafico" class="btn btn-primary">Generar Gráfico</a>  
+                        <a id="reload" class="btn btn-primary">Limpiar</a>  
                         <br/><br/>
                     </div>
                     
                 </div>
             </div>
         </div>
+        <br/><br/>
+        <canvas id="lineChart"></canvas> <!--Canva del grafico lineal-->
     </div>
     <h5 id="checker" style="color: rgb(212, 195, 228);">OpenCv is loading.....</h2>
     <script src="genetico.js"></script>
