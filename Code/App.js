@@ -2,7 +2,7 @@ function openCVReady() {
   // Se usa esta función para llamar al Fitness
   cv['onRuntimeInitialized'] = () => {
     // Fitness();
-    let list = [[10, 10], [5, 5]];
+    let list = [[0, 0], [150, 150], [300, 100], [500, 300]];
     draw(list);
   };
 }
@@ -83,8 +83,7 @@ function draw(list) {
 
   let i = 0;
   while (i < list.length){
-    console.log("i: " + i);
-    if ((i+1) > list.length){
+    if ((i+1) >= list.length){
       break;
     }
 
