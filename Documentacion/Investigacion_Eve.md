@@ -235,4 +235,101 @@ use an edge detect algorithm on the image, then for each line I find the distanc
  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range
  sacar porcentaje del range
 
- 
+ ```html
+ <!DOCTYPE html>
+<html>
+<head>
+  <title>Cronómetro</title>
+</head>
+<body>
+  <h1>Cronómetro</h1>
+  <p id="timer">00:00:00</p>
+
+  <script>
+    function startTimer() {
+      var startTime = Date.now(); // Guardar el tiempo de inicio actual
+
+      // Definir la función que deseas ejecutar
+      function tuFuncion() {
+        // Tu código aquí
+        // ...
+
+        // Cuando la función haya terminado, detener el cronómetro
+        stopTimer();
+      }
+
+      // Ejecutar la función deseada
+      tuFuncion();
+
+      function updateTimer() {
+        var elapsedTime = Date.now() - startTime; // Calcular el tiempo transcurrido en milisegundos
+
+        // Convertir el tiempo transcurrido a formato HH:MM:SS
+        var hours = Math.floor(elapsedTime / 3600000);
+        var minutes = Math.floor((elapsedTime % 3600000) / 60000);
+        var seconds = Math.floor((elapsedTime % 60000) / 1000);
+
+        // Agregar ceros a la izquierda si es necesario
+        hours = hours.toString().padStart(2, '0');
+        minutes = minutes.toString().padStart(2, '0');
+        seconds = seconds.toString().padStart(2, '0');
+
+        var timerElement = document.getElementById('timer');
+        timerElement.textContent = hours + ':' + minutes + ':' + seconds; // Actualizar el elemento HTML del cronómetro
+      }
+
+      var timerInterval = setInterval(updateTimer, 1000); // Iniciar el intervalo del cronómetro
+
+      function stopTimer() {
+        clearInterval(timerInterval); // Detener el intervalo del cronómetro
+      }
+    }
+
+    startTimer(); // Iniciar el cronómetro al cargar la página
+  </script>
+</body>
+</html>
+```
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gráfico Lineal</title>
+  <script src="ruta/al/chart.min.js"></script>
+</head>
+<body>
+  <canvas id="lineChart"></canvas>
+
+  <script>
+    // Datos del gráfico
+    var data = {
+      labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio"],
+      datasets: [{
+        label: "Ventas",
+        data: [120, 180, 90, 200, 150, 300],
+        borderColor: "blue",
+        fill: false
+      }]
+    };
+
+    // Configuración del gráfico
+    var options = {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    };
+
+    // Crear el gráfico
+    var ctx = document.getElementById('lineChart').getContext('2d');
+    var lineChart = new Chart(ctx, {
+      type: 'line',
+      data: data,
+      options: options
+    });
+  </script>
+</body>
+</html>
+```
