@@ -74,5 +74,5 @@ stringObj = ''.join([str(x) for x in listaObj])
 resultado, generaciones = algoritmoGenetico(stringObj, 100, 0.01)
 print('Objetivo:', listaObj)
 print('Resultado hijo:', resultado)
-#listaFinal = [int(resultado[i:i+2]) for i in range(0, len(resultado), 2)]
-#print('Resultado en lista:', listaFinal)
+listaFinal = [int(resultado[i:i+2]) for i in range(0, len(resultado), 2)]
+print('Resultado en lista:', listaFinal)
