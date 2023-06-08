@@ -3,13 +3,14 @@
 //RangeInputs del html
 const rangeInputs = document.querySelectorAll(".form-range");
 const btnInicio = document.getElementById("initGen");
+const btnGrafico = document.getElementById("grafico");
+const btnReload = document.getElementById("reload");
 
 //Declarar variables informacion dada por el usuario
 let maximaPoblacion, individuosPoblacion;
 let individuosElegir, individuosMutar, individuosCombinar;
 
 //Canvas tanto el de entrada como el de salida, crear la imagen
-const context = canvas.getContext("2d");
 const strokeWidthInput = document.getElementById("strokeWidth");
 const canvasInput = document.getElementById('canvasInput');
 const canvasOutput = document.getElementById('canvasOutput');
@@ -31,6 +32,10 @@ let total_principal;
 
 let start_prom, end_prom, total_prom;
 let promedio = [];
+
+//Variables graficar fitness
+let fitnessPromGen = [];
+let mejorFitnessGen = [];
 
 function opencvcheck() {
     isOpencvReady = true;
@@ -124,7 +129,7 @@ btnInicio.addEventListener("click", () => {
     // Actualizar el elemento HTML con el tiempo de ejecución formateado
     var executionTimeElement = document.getElementById('tiempoTotal');
     executionTimeElement.textContent = `${minutes} min ${seconds} seg ${milliseconds} ms`;
-    
+
     // Calcular el promedio de los tiempos
     var suma = promedio.reduce(function (a, b) {
         return a + b;
@@ -141,6 +146,11 @@ btnInicio.addEventListener("click", () => {
     promTimeElement.textContent = `${minutes_prom} min ${seconds_prom} seg ${milliseconds_prom} ms`;
 });
 
+btnGrafico.addEventListener("click", () => {
+    drawGaphic();
+});
+
+btnReload.addEventListener('click', () => window.location.reload(true));
 // ----------------------------- ALGORITMO GENETICO -----------------------------------
 
 
@@ -277,6 +287,13 @@ function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, ran
         // Mostrar el individuo con la mejor puntuación fitness
         console.log('Mejor individuo:', poblacion[0]);
 
+        //Obtener el mejor fitness y el fitness promedio por generacion para el grafico
+        mejorFitnessGen.push(poblacion[0].fitness); //Mejor fitness de esta generacion
+
+        const sumaFitness = poblacion.reduce((total, individuo) => total + individuo.fitness, 0);
+        const promFitness = sumaFitness / poblacion.length;
+        fitnessPromGen.push(promFitness); //Fitness promedio generacion
+
         // Generar la siguiente generación
         poblacion = crearSigGeneracion(poblacion, puntajeSeleccion, rangoMutacion, rangoCombinacion);
 
@@ -361,10 +378,10 @@ function Fitness(imgGenerated) {
 function draw(list) {
     var drawnImg = new cv.Mat(600, 600, cv.CV_8UC3, [255, 255, 255, 255]);
     /*
-     Ejemplo de dibujo de una línea
-     let pt1 = new cv.Point(0, 0);
-     let pt2 = new cv.Point(150, 150);
-     cv.line(drawnImg, pt1, pt2, [0, 0, 0, 0], 2)
+        Ejemplo de dibujo de una línea
+        let pt1 = new cv.Point(0, 0);
+        let pt2 = new cv.Point(150, 150);
+        cv.line(drawnImg, pt1, pt2, [0, 0, 0, 0], 2)
     */
 
     let i = 0;
@@ -383,4 +400,62 @@ function draw(list) {
     cv.imshow('canvasOutput', drawnImg);
     return drawnImg;
 
+}
+
+/* ----------- HACER GRAFICO LINEAL -------------- */
+function drawGaphic() {
+
+    let labels = [];
+    for (let i = 0; i < generacionMaxima; i++) {
+        labels.push(i);
+    }
+
+    const ctx = document.getElementById('lineChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Mejor Fitness Generación',
+                data: mejorFitnessGen,
+                borderColor: 'rgba(255, 53, 127, 1)',
+                backgroundColor: 'rgba(152, 68, 183, 1)',
+                yAxisID: 'y-axis-1',
+                tension: 0
+            }, {
+                label: 'Fitness Promedio Generación',
+                data: fitnessPromGen,
+                borderColor: '#21f4df',
+                backgroundColor: 'rgba(87, 111, 230, 1)',
+                yAxisID: 'y-axis-2',
+                tension: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                yAxes: [
+                    {
+                        id: 'y-axis-1',
+                        type: 'linear',
+                        position: 'left'
+                    },
+                    {
+                        id: 'y-axis-2',
+                        type: 'linear',
+                        position: 'right'
+                    }
+                ]
+            },
+            animation: {
+                onComplete: function () {
+                    // Cambia el fondo del canvas al color deseado después de que se genere el gráfico
+                    ctx.canvas.style.background = 'white';
+                }
+            }
+        }
+    });
+
+    // Mostrar el gráfico después de su creación
+    document.getElementById('lineChart').style.display = 'block';
 }

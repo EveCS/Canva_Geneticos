@@ -1,35 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Tiempo de ejecución</title>
+  <title>Chart.js Line Chart - Multi Axis</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
 </head>
 <body>
-  <h1>Tiempo de ejecución</h1>
-  <p id="executionTime">Clic en el botón para ejecutar la tarea</p>
-
-  <button onclick="runTask()">Ejecutar tarea</button>
+  <canvas id="myChart" width="100" height="50"></canvas>
 
   <script>
-    function runTask() {
-      var start = Date.now();
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+    const dataset1Data = [65, 59, 80, 81, 56, 55];
+    const dataset2Data = [28, 48, 40, 19, 86, 27];
 
-      // Comienza la tarea
-      for (var i = 0; i < 100000000; i++) {
-        // Tarea a realizar
+    const ctx = document.getElementById('myChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Dataset 1',
+          data: dataset1Data,
+          borderColor: 'red',
+          backgroundColor: 'rgba(255, 0, 0, 0.5)',
+          yAxisID: 'y-axis-1',
+          tension: 0
+        }, {
+          label: 'Dataset 2',
+          data: dataset2Data,
+          borderColor: 'blue',
+          backgroundColor: 'rgba(0, 0, 255, 0.5)',
+          yAxisID: 'y-axis-2',
+          tension: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          yAxes: [{
+            id: 'y-axis-1',
+            type: 'linear',
+            position: 'left'
+          }, {
+            id: 'y-axis-2',
+            type: 'linear',
+            position: 'right'
+          }]
+        }
       }
-
-      var end = Date.now();
-      var executionTime = end - start;
-
-      // Calcular minutos, segundos y milisegundos
-      var minutes = Math.floor(executionTime / 60000);
-      var seconds = Math.floor((executionTime % 60000) / 1000);
-      var milliseconds = executionTime % 1000;
-
-      // Actualizar el elemento HTML con el tiempo de ejecución formateado
-      var executionTimeElement = document.getElementById('executionTime');
-      executionTimeElement.textContent = `Tiempo de ejecución: ${minutes} min ${seconds} seg ${milliseconds} ms`;
-    }
+    });
   </script>
 </body>
 </html>
