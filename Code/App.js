@@ -1,7 +1,9 @@
-function callFitness() {
+function openCVReady() {
   // Se usa esta función para llamar al Fitness
   cv['onRuntimeInitialized'] = () => {
-    Fitness();
+    // Fitness();
+    let list = [[10, 10], [5, 5]];
+    draw(list);
   };
 }
 
@@ -32,7 +34,7 @@ function Fitness() {
         console.log("Redimensiona para coincidir con imagen 2 > Imagen 1 columnas: " + img1.cols);
         console.log("Redimensiona para coincidir con imagen 1 > Imagen 1 filas: " + img1.rows);
       }
-      if(img2.cols > img1.cols || img2.rows > img1.rows){
+      if (img2.cols > img1.cols || img2.rows > img1.rows) {
         cv.resize(img2, img2, new cv.Size(img1.cols, img1.rows));
         console.log("Redimensiona para coincidir con imagen 1 > Imagen 2 columnas: " + img2.cols);
         console.log("Redimensiona para coincidir con imagen 1 > Imagen 2 filas: " + img2.rows);
@@ -68,4 +70,32 @@ function Fitness() {
       return diffPixels;
     };
   };
+}
+
+function draw(list) {
+  var drawnImg = new cv.Mat(600, 600, cv.CV_8UC3, [255, 255, 255, 255]);
+  /*
+   Ejemplo de dibujo de una línea
+   let pt1 = new cv.Point(0, 0);
+   let pt2 = new cv.Point(150, 150);
+   cv.line(drawnImg, pt1, pt2, [0, 0, 0, 0], 2)
+  */
+
+  let i = 0;
+  while (i < list.length){
+    console.log("i: " + i);
+    if ((i+1) > list.length){
+      break;
+    }
+
+    start = new cv.Point(list[i][0], list[i][1]);
+    end = new cv.Point(list[i+1][0], list[i+1][1]);
+
+    cv.line(drawnImg, start, end, [0, 0, 0, 0], 2)
+    i++;
+  }
+
+  cv.imshow('canvasOutput', drawnImg);
+  return drawnImg;
+
 }
