@@ -108,7 +108,7 @@ btnInicio.addEventListener("click", () => {
     // Ejecutar el algoritmo genético con los parámetros deseados
     iniciarAlgGenetico(generacionMaxima, individuosPoblacion, individuosElegir, individuosMutar, individuosCombinar);
 
-    stop(); // Detener cronometro
+    //stop(); // Detener cronometro
 });
 
 
@@ -117,10 +117,9 @@ btnInicio.addEventListener("click", () => {
 function iniciarCronometro() {
     const cronometroElemento = document.getElementById("cronometro");
     segundos++;
-    const horas = Math.floor(segundos / 3600);
-    const minutos = Math.floor((segundos % 3600) / 60);
+    const minutos = Math.floor(segundos / 60);
     const seg = segundos % 60;
-    cronometroElemento.textContent = `${agregarCeros(horas)}:${agregarCeros(minutos)}:${agregarCeros(seg)}`;
+    cronometroElemento.textContent = `${agregarCeros(minutos)}:${agregarCeros(seg)}`;
 }
 
 function start() {
@@ -267,10 +266,6 @@ function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, ran
 
         // Mostrar el individuo con la mejor puntuación fitness
         console.log('Mejor individuo:', poblacion[0]);
-        console.log('---------------------------');
-        console.log('Poblacion:', poblacion);
-        console.log('---------------------------');
-        console.log('---------------------------');
         // Generar la siguiente generación
         poblacion = crearSigGeneracion(poblacion, puntajeSeleccion, rangoMutacion, rangoCombinacion);
 
