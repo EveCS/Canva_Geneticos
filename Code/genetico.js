@@ -273,13 +273,18 @@ function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, ran
     }
 }
 
-function Fitness() {
+function Fitness(imgGenerated) {
 
     // TODO: Cambiar la manera en la que el Fitness recibe las imágenes
   
     // Carga la imagen 1
-    var imgElement = document.createElement('img');
-    imgElement.src = "../Image/ima02.jpg";
+    let imgElement = document.getElementById('canvasInput');
+    let inputElement = document.getElementsByClassName('form-control');
+    inputElement.addEventListener('change', (e) => {
+    imgElement.src = URL.createObjectURL(e.target.files[0]);
+    }, false);
+
+
     imgElement.onload = function () {
       img1 = cv.imread(imgElement);
       console.log(img1);
@@ -287,8 +292,7 @@ function Fitness() {
       console.log("Img1 rows: " + img1.rows);
   
       // Carga la imagen 2
-      var imgElement2 = document.createElement('img');
-      imgElement2.src = "../Image/ima06.jpg";
+      var imgElement2 = imgGenerated;
       imgElement2.onload = function () {
         img2 = cv.imread(imgElement2);
         console.log(img2);
