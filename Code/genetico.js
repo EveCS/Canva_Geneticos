@@ -278,8 +278,12 @@ function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, ran
         // Calcular la puntuación fitness para cada individuo
         for (const individuo of poblacion) {
             // Se llama a la función de dibujo y se le pasa el individuo
-            let imgGenerated = draw(individuo);
+            let lista = individuo.map(point => [point.x, point.y]); // Crear una nueva lista de puntos en el formato [[x, y], [x, y], [x, y]]
+            //console.log("Lista: " + lista);
+            let imgGenerated = draw(lista);
             // El resultado se le pasa al Fitness() para que determine el puntaje recibido en comparación con la imagen objetivo
+            let fitness = Fitness(imgGenerated);
+            console.log("Fitness: " + fitness);
             individuo.fitness = Fitness(imgGenerated);
         }
 
@@ -314,14 +318,10 @@ function Fitness(imgGenerated) {
 
     // Carga la imagen 1
     let imgElement = document.getElementById('canvasInput');
-    let inputElement = document.getElementsByClassName('form-control');
-    inputElement.addEventListener('change', (e) => {
-        imgElement.src = URL.createObjectURL(e.target.files[0]);
-    }, false);
-
-
+    
     imgElement.onload = function () {
         img1 = cv.imread(imgElement);
+        cv.imshow('canvasTest', img1);
         console.log(img1);
         console.log("Img1 cols: " + img1.cols);
         console.log("Img1 rows: " + img1.rows);
@@ -391,6 +391,8 @@ function draw(list) {
         if ((i + 1) >= list.length) {
             break;
         }
+
+        // Ejemplo de lista: [[1, 0], [2, 6], [3, 7], [4, 8], [5, 9]]
 
         start = new cv.Point(list[i][0], list[i][1]);
         end = new cv.Point(list[i + 1][0], list[i + 1][1]);
