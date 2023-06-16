@@ -29,17 +29,6 @@ let tiempoGen = [];
 
 let src, dst, contours, hierarchy;
 
-//Variables cronometro
-let start_principal, end_principal;
-let total_principal;
-
-let start_prom, end_prom, total_prom;
-let promedio = [];
-
-//Variables graficar fitness
-let fitnessPromGen = [];
-let mejorFitnessGen = [];
-
 function opencvcheck() {
     isOpencvReady = true;
     document.getElementById('checker').innerHTML = "Opencv is Ready."
@@ -70,8 +59,10 @@ function loadImage(event) {
         };
         image.src = event.target.result;
         imageInput = image.src;
+        imageInput = image.src;
     };
     reader.readAsDataURL(file);
+
 
 }
 
@@ -118,43 +109,20 @@ btnInicio.addEventListener("click", () => {
     individuosElegir = (document.getElementById("rangeElegir").value) / 100;
     individuosMutar = (document.getElementById("rangeMutar").value) / 100;
     individuosCombinar = (document.getElementById("rangeCombinar").value) / 100;
+    individuosElegir = (document.getElementById("rangeElegir").value) / 100;
+    individuosMutar = (document.getElementById("rangeMutar").value) / 100;
+    individuosCombinar = (document.getElementById("rangeCombinar").value) / 100;
     console.log("max pob ", maximaPoblacion, " ind pob ", individuosPoblacion);
     console.log("% elegir: ", individuosElegir, " mutar ", individuosMutar, " comb ", individuosCombinar);
 
     // Ejecutar el algoritmo genético con los parámetros deseados
     iniciarAlgGenetico(generacionMaxima, individuosPoblacion, individuosElegir, individuosMutar, individuosCombinar);
 
-    // ---- Tiempo cronometrado de la duracion de las funciones ----
-
-    // Calcular minutos, segundos y milisegundos
-    var minutes = Math.floor(total_principal / 60000);
-    var seconds = Math.floor((total_principal % 60000) / 1000);
-    var milliseconds = total_principal % 1000;
-
-    // Actualizar el elemento HTML con el tiempo de ejecución formateado
-    var executionTimeElement = document.getElementById('tiempoTotal');
-    executionTimeElement.textContent = `${minutes} min ${seconds} seg ${milliseconds} ms`;
-
-    // Calcular el promedio de los tiempos
-    var suma = promedio.reduce(function (a, b) {
-        return a + b;
-    }, 0);
-
-    var promedioTiempos = suma / promedio.length;
-
-    var minutes_prom = Math.floor(promedioTiempos / 60000);
-    var seconds_prom = Math.floor((promedioTiempos % 60000) / 1000);
-    var milliseconds_prom = promedioTiempos % 1000;
-
-    // Actualizar el elemento HTML con el tiempo de ejecución formateado
-    var promTimeElement = document.getElementById('tiempoPromedio');
-    promTimeElement.textContent = `${minutes_prom} min ${seconds_prom} seg ${milliseconds_prom} ms`;
+    //stop(); // Detener cronometro
 });
 
-btnGrafico.addEventListener("click", () => {
-    drawGaphic();
-});
 
+btnReload.addEventListener('click', () => window.location.reload(true));
 btnReload.addEventListener('click', () => window.location.reload(true));
 // ----------------------------- ALGORITMO GENETICO -----------------------------------
 
@@ -181,7 +149,7 @@ function createRandomindividuo() {
 }
 
 // Función para calcular la puntuación de un individuo ( la distancia total entre los puntos)
-function calcularFitness(individuo) {
+function calculateFitness(individuo) {
     let distanciaTotal = 0;
 
     for (let i = 1; i < individuo.length; i++) {
@@ -309,163 +277,10 @@ function iniciarAlgGenetico(maxGeneraciones, tamPoblacion, puntajeSeleccion, ran
         poblacion = crearSigGeneracion(poblacion, puntajeSeleccion, rangoMutacion, rangoCombinacion);
 
         generacion++;
-        end_prom = performance.now();
-        let prom = end_prom - start_prom;
-        promedio.push(prom);
     }
-    end_principal = Date.now();
-    total_principal = end_principal - start_principal;
 }
 
-function Fitness(img2) {
 
-    // TODO: Cambiar la manera en la que el Fitness recibe las imágenes
-
-    // Carga la imagen 1
-    let imgElement = document.createElement('img');
-    imgElement.src = imageInput;
-
-    imgElement.onload = function () {
-        img1 = cv.imread(imgElement);
-        console.log(img1);
-        console.log("Img1 cols: " + img1.cols);
-        console.log("Img1 rows: " + img1.rows);
-
-        // Carga la imagen 2
-        console.log(img2);
-        console.log("Img2 cols: " + img2.cols);
-        console.log("Img2 rows: " + img2.rows);
-
-        if (img1.cols > img2.cols || img1.rows > img2.rows) {
-            cv.resize(img1, img1, new cv.Size(img2.cols, img2.rows));
-            console.log("Redimensiona para coincidir con imagen 2 > Imagen 1 columnas: " + img1.cols);
-            console.log("Redimensiona para coincidir con imagen 1 > Imagen 1 filas: " + img1.rows);
-        }
-        if (img2.cols > img1.cols || img2.rows > img1.rows) {
-            cv.resize(img2, img2, new cv.Size(img1.cols, img1.rows));
-            console.log("Redimensiona para coincidir con imagen 1 > Imagen 2 columnas: " + img2.cols);
-            console.log("Redimensiona para coincidir con imagen 1 > Imagen 2 filas: " + img2.rows);
-        }
-
-        // Convierte la imagen a escala de grises
-        const grayImg1 = new cv.Mat();
-        const grayImg2 = new cv.Mat();
-        cv.cvtColor(img1, grayImg1, cv.COLOR_RGBA2GRAY);
-        cv.cvtColor(img2, grayImg2, cv.COLOR_RGBA2GRAY);
-
-        // Calcula la diferencia absoluta entre las dos imágenes
-        const diff = new cv.Mat();
-        cv.absdiff(grayImg1, grayImg2, diff);
-
-        // Reduce los valores a binario para identificar los pixeles diferentes
-        const binaryDiff = new cv.Mat();
-        cv.threshold(diff, binaryDiff, 0, 255, cv.THRESH_BINARY);
-
-        // Cuenta los pixeles diferentes
-        const diffPixels = cv.countNonZero(binaryDiff);
-
-        // Limpia la memoria
-        img1.delete();
-        //img2.delete();
-        grayImg1.delete();
-        grayImg2.delete();
-        diff.delete();
-        binaryDiff.delete();
-
-        // Imprime y retorna los resultados
-
-        if (!(diffPixels > 0)){
-            diffPixels = (img2.cols * img2.rows);
-        }
-
-        console.log("Número de pixeles diferentes entre las dos imágenes:" + diffPixels + "px");
-        return diffPixels;
-
-    };
-}
-
-function draw(list) {
-    var drawnImg = new cv.Mat(600, 600, cv.CV_8UC3, [255, 255, 255, 255]);
-    /*
-        Ejemplo de dibujo de una línea
-        let pt1 = new cv.Point(0, 0);
-        let pt2 = new cv.Point(150, 150);
-        cv.line(drawnImg, pt1, pt2, [0, 0, 0, 0], 2)
-    */
-
-    let i = 0;
-    while (i < list.length) {
-        if ((i + 1) >= list.length) {
-            break;
-        }
-
-        // Ejemplo de lista: [[1, 0], [2, 6], [3, 7], [4, 8], [5, 9]]
-
-        start = new cv.Point(list[i][0], list[i][1]);
-        end = new cv.Point(list[i + 1][0], list[i + 1][1]);
-
-        cv.line(drawnImg, start, end, [0, 0, 0, 0], 2)
-        i++;
-    }
-
-    cv.imshow('canvasOutput', drawnImg);
-    return drawnImg;
-
-}
-
-/* ----------- HACER GRAFICO LINEAL -------------- */
-function drawGaphic() {
-
-    let labels = [];
-    for (let i = 0; i < generacionMaxima; i++) {
-        labels.push(i);
-    }
-
-    const ctx = document.getElementById('lineChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Mejor Fitness Generación',
-                data: mejorFitnessGen,
-                borderColor: 'rgba(255, 53, 127, 1)',
-                backgroundColor: 'rgba(152, 68, 183, 1)',
-                yAxisID: 'y-axis-1',
-                tension: 0
-            }, {
-                label: 'Fitness Promedio Generación',
-                data: fitnessPromGen,
-                borderColor: '#21f4df',
-                backgroundColor: 'rgba(87, 111, 230, 1)',
-                yAxisID: 'y-axis-2',
-                tension: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                yAxes: [
-                    {
-                        id: 'y-axis-1',
-                        type: 'linear',
-                        position: 'left'
-                    },
-                    {
-                        id: 'y-axis-2',
-                        type: 'linear',
-                        position: 'right'
-                    }
-                ]
-            },
-            animation: {
-                onComplete: function () {
-                    // Cambia el fondo del canvas al color deseado después de que se genere el gráfico
-                    ctx.canvas.style.background = 'white';
-                }
-            }
-        }
-    });
 
     // Mostrar el gráfico después de su creación
     document.getElementById('lineChart').style.display = 'block';
